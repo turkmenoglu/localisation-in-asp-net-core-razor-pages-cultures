@@ -1,3 +1,5 @@
+using Localisation.Resources;
+using Localisation.Services;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Localization;
@@ -6,7 +8,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Options;
 using System.Globalization;
-
+using System.Reflection;
 
 namespace Localisation
 {
@@ -41,9 +43,24 @@ namespace Localisation
                     new CultureInfo("en-GB")
                 };
 
-                options.DefaultRequestCulture = new RequestCulture("en-GB");
+                options.DefaultRequestCulture = new RequestCulture("en");
                 options.SupportedCultures = supportedCultures;
                 options.SupportedUICultures = supportedCultures;
+            });
+
+            services.AddLocalization(options => options.ResourcesPath = "Resources");
+
+            services.AddSingleton<CommonLocalizationService>();
+
+            services.AddMvc().AddViewLocalization().AddDataAnnotationsLocalization(options =>
+            {
+                options.DataAnnotationLocalizerProvider = (type, factory) =>
+                {
+                    var assemblyName = new AssemblyName(typeof(CommonResources).GetTypeInfo().Assembly.FullName);
+                    string baseName = nameof(CommonResources);
+                    string location = assemblyName.Name;
+                    return factory.Create(baseName, location);
+                };
             });
         }
 

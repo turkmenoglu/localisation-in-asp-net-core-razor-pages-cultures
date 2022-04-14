@@ -1,0 +1,35 @@
+﻿@page
+@inject CommonLocalizationService localizer
+@model Localisation.Pages.ContactModel
+@{
+    ViewData["Title"] = localizer.Get("Contact Us");
+}
+
+<h1>@localizer.Get("Contact Us")</h1>
+<form method="post">
+    <div class="form-group">
+        <label asp-for="FirstName"></label>
+        <input class="form-control" asp-for="FirstName">
+        <span asp-validation-for="FirstName"></span>
+    </div>
+    <div class="form-group">
+        <label asp-for="LastName"></label>
+        <input class="form-control" asp-for="LastName">
+        <span asp-validation-for="LastName"></span>
+    </div>
+    <div class="form-group">
+        <label asp-for="Email"></label>
+        <input class="form-control" asp-for="Email">
+        <span asp-validation-for="Email"></span>
+    </div>
+    <div class="form-group">
+        <label asp-for="Message"></label>
+        <textarea class="form-control" asp-for="Message"></textarea>
+        <span asp-validation-for="Message"></span>
+    </div>
+    <button class="btn btn-secondary">@localizer.Get("Submit")</button>
+</form>
+
+@section scripts{
+    <partial name="_ValidationScriptsPartial" />
+}
